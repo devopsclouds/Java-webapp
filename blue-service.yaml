@@ -6,6 +6,8 @@ spec:
   selector:
     app: blue
   ports:
+    
     - port: 8765
+      nodePort: 31000
       targetPort: 9376
   type: LoadBalancer
