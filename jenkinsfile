@@ -1,0 +1,53 @@
+properties([parameters([choice(choices: ['YES', 'NO'], description: 'click YES or NO for sonar-build', name: 'Sonar-build'), string(defaultValue: 'Java-webapp', description: 'please enter repo name', name: 'repo'), string(defaultValue: 'master', description: 'please enter branch name', name: 'branch'), string(defaultValue: 'devopsclouds', description: 'please enter Githuborgainzation name', name: 'Githuborgainzationname')])])
+
+pipeline {
+    agent any
+    
+ 
+tools {
+    jdk 'java'
+    maven 'Maven'
+}
+         
+
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('git'){
+            steps {
+                git branch: '${branch}', credentialsId: 'Git', url: 'https://github.com/${Githuborgainzationname}/${repo}.git'
+            }
+        }
+        stage('sonarqubeanaylsis'){
+            
+            
+            steps {
+            withSonarQubeEnv('sonarqube-token') {
+            
+                sh 'mvn sonar:sonar -Dsonar.projectKey=sonar123'
+            
+            }
+            }
+        }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
+        stage('maven'){
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        
+    }
+}
