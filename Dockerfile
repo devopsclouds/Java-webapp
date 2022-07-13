@@ -1,8 +1,9 @@
 FROM maven:3.5-jdk-8 AS build
+        ARG  login_id
 	WORKDIR /usr/src/app
 	COPY src ./src
 	COPY pom.xml .
-	RUN mvn -f /usr/src/app/pom.xml clean -Dmaven.test.skip=true package
+	RUN mvn  -s settings.xml -f /usr/src/app/pom.xml clean -Dmaven.test.skip=true package sonar:sonar -Dsonar.login=$login_id
 	
 
 	
