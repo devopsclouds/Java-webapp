@@ -27,3 +27,7 @@ save username and password in jenkins credtinals
 add docker hub cred in  environemet varibale in pipeline syntax
 dockerhub=credentials('dockerhub')
 docker login -u $dockerhub_usr --password-stdin
+
+add user in ur docker group
+
+chown -a -G docker username
