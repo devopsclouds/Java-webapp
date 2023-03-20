@@ -14,7 +14,7 @@ spec:
     - infinity
 ''') {
     node(POD_LABEL) {
-        #def mvnhome = tool name: 'Maven-3.8.6', type: 'maven'
+        
         stage('git'){
             
                 git branch: 'docker', url: 'https://github.com/devopsclouds/Java-webapp.git'
