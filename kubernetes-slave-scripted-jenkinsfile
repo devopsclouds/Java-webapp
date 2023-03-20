@@ -7,44 +7,19 @@ kind: Pod
 spec:
   containers:
   - name: sonarqube
-    image: maven:3.5-jdk-8
+    image: docker
     command:
     - sleep
     args:
     - infinity
 ''') {
     node(POD_LABEL) {
-        def mvnhome = tool name: 'Maven-3.8.6', type: 'maven'
+        #def mvnhome = tool name: 'Maven-3.8.6', type: 'maven'
         stage('git'){
             
-                git branch: 'sonar', url: 'https://github.com/devopsclouds/Java-webapp.git'
+                git branch: 'docker', url: 'https://github.com/devopsclouds/Java-webapp.git'
           
         }
-        stage('sonarqubeanaylsis'){
-            
-            
-           
-            withSonarQubeEnv('sonar123') {
-            
-                sh "${mvnhome}/bin/mvn sonar:sonar -Dsonar.projectKey=sonar123 -Dsonar.login=sqp_334b29304c79cb3376c46960f6d569f0a128ebaf"
-            
-            
-            }
-        }
-        stage("Quality Gate") {
-            
-                timeout(time: 1, unit: 'HOURS') {
-              def qg = waitForQualityGate()
-              if (qg.status != 'OK') {
-                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
-              }
-                }
-        }
         
-        stage('maven'){
-            
-                sh "${mvnhome}/bin/mvn clean package"
-            
-        }
     }
 }
