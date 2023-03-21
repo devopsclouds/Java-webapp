@@ -42,6 +42,7 @@ pipeline {
 		 stage('Deploy to kubernetes cluster') {
 
 			steps {
+			        sh 'kubectl delete -f Javawebappdeploy.yaml'
 				sh 'kubectl create -f Javawebappdeploy.yaml'
 
 
