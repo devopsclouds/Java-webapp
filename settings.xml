@@ -184,18 +184,7 @@ under the License.
    |
    |-->
   <profiles>
-           <profile>
-            <id>sonar</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <!-- Optional URL to server. Default value is http://localhost:9000 -->
-                <sonar.host.url>
-                  <!-- enter sonar server --!>
-                    </sonar.host.url>
-            </properties>
-        </profile>
+           
     <!-- profile
      | Specifies a set of introductions to the build process, to be activated using one or more of the
      | mechanisms described above. For inheritance purposes, and to activate profiles via <activatedProfiles/>
