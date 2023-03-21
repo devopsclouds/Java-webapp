@@ -5,7 +5,7 @@ FROM maven:3.5-jdk-8 AS build
 	WORKDIR /usr/src/app
 	COPY src ./src
 	COPY pom.xml .
-	COPY settings.xml .
+	#COPY settings.xml .
 	RUN mvn  clean -Dmaven.test.skip=true package sonar:sonar  -Dsonar.projectKey=$SONAR_PRJ_KEY -Dsonar.login=$SONAR_TOKEN  -Dsonar.host.url="$SONAR_HOST" 
 
 
