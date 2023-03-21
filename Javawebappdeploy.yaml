@@ -28,7 +28,7 @@ kind: Service
 metadata:
   name: javaapp
 spec:
-  type: javaapp
+  type: LoadBalancer
   selector:
     app: javaapp
   ports:
