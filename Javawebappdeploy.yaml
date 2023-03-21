@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: javaapp
+ labels:
+   app: javaapp
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+    app: javaapp
+ template:
+    metadata:
+      name:  javaapp-pod
+      labels:
+        app: javaapp
+        tier: dev
+    spec:
+      containers:
+      - name: javaapp
+        image: docker89781/javajenkinsapp:latest
+        ports:
+        - containerPort: 8080
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: javaapp
+spec:
+  type: javaapp
+  selector:
+    app: javaapp
+  ports:
+  - protocol: TCP
+    port: 8080
