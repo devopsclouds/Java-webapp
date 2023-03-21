@@ -1,4 +1,4 @@
-FROM maven:3.5-jdk-8 AS build
+FROM maven
 RUN java --version
 ARG SONAR_TOKEN=token
         ARG SONAR_PRJ_KEY=key
