@@ -1,5 +1,6 @@
 FROM maven:3.5-jdk-8 AS build
-        ARG SONAR_TOKEN=token
+RUN java --version
+ARG SONAR_TOKEN=token
         ARG SONAR_PRJ_KEY=key
 	ENV SONAR_HOST http://192.168.0.10:9000/
 	WORKDIR /usr/src/app
