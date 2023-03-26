@@ -32,7 +32,7 @@ pipeline {
 			    
                 
 			    
-				sh 'docker build --build-arg SONAR_TOKEN=$SONAR_SECRET_TEST --build-arg SONAR_PRJ_KEY=javaproject -t $DOCKERHUB_CREDENTIALS_USR/javajenkinsapp:latest .'
+				sh 'docker build --build-arg SONAR_TOKEN=$SONAR_SECRET_TEST --build-arg SONAR_PRJ_KEY=javaproject --build-arg SONAR_HOST=localhost:9000 -t $DOCKERHUB_CREDENTIALS_USR/javajenkinsapp:latest .'
 				 
 				sh 'docker push $DOCKERHUB_CREDENTIALS_USR/javajenkinsapp:latest'
 			    
