@@ -2,7 +2,7 @@ FROM maven AS build
 #RUN java --version
 ARG SONAR_TOKEN=token
         ARG SONAR_PRJ_KEY=key
-	ENV SONAR_HOST http://192.168.0.10:9000/
+	ARG SONAR_HOST=sonarhost
 	WORKDIR /usr/src/app
 	COPY src ./src
 	COPY pom.xml .
