@@ -1,31 +1,83 @@
-name: javaci
+name: Build Scan Patch and Push Docker Image
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+    branches:
+      - main
+      - master
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+env:
+  IMAGE_NAME: sample-app
+  IMAGE_TAG: latest
+
 jobs:
-  build:
-
+  build-scan-patch-push:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn clean -Dmaven.test.skip=true sonar:sonar  -Dsonar.projectKey=${{ secrets.projectkey }} -Dsonar.login=${{ secrets.login }} -Dsonar.host.url=${{ secrets.host }} package 
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget rpm
+
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.64.1_Linux-64bit.deb
+
+          sudo dpkg -i trivy_0.64.1_Linux-64bit.deb
+
+          trivy --version
+
+      - name: Install Copa
+        run: |
+          wget https://github.com/project-copacetic/copacetic/releases/latest/download/copa_linux_amd64.deb
+
+          sudo dpkg -i copa_linux_amd64.deb
+
+          copa version
+
+      - name: Install BuildKit
+        run: |
+          sudo apt-get install -y buildkit
+
+          buildkitd &
+          sleep 10
+
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+
+      - name: Scan Docker Image using Trivy
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            --format json \
+            -o trivy-report.json \
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Patch Vulnerabilities using Copa
+        run: |
+          copa patch \
+            -i ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+            -r trivy-report.json \
+            -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:patched
+
+      - name: Re-Scan Patched Image
+        run: |
+          trivy image \
+            --severity HIGH,CRITICAL \
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:patched
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Patched Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:patched
