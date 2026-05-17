@@ -3,8 +3,7 @@ name: Build Scan Patch and Push Docker Image
 on:
   push:
     branches:
-      - main
-      - master
+      - develop
 
 env:
   IMAGE_NAME: sample-app
