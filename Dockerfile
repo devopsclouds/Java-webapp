@@ -1,4 +1,5 @@
 FROM maven AS build
+###test
 #RUN java --version
 #ARG SONAR_TOKEN=token
 #ARG SONAR_PRJ_KEY=key
