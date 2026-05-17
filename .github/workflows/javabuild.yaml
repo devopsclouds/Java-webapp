@@ -1,4 +1,4 @@
-name: Build Scan Patch and Push Docker Image
+ame: Build Scan Patch and Push Docker Image
 
 on:
   push:
