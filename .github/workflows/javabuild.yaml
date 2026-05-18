@@ -40,7 +40,16 @@ jobs:
         run: |
            wget -qO- https://raw.githubusercontent.com/project-copacetic/copacetic/main/install.sh | sudo bash
 
-           copa version
+           sudo find / -name copa 2>/dev/null
+
+           sudo cp /usr/local/bin/copa /usr/bin/copa || true
+
+           sudo chmod +x /usr/bin/copa
+
+          which copa
+
+          copa version
+
 
 
       - name: Install BuildKit
