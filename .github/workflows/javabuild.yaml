@@ -46,9 +46,9 @@ jobs:
 
            sudo chmod +x /usr/bin/copa
 
-          which copa
+           which copa
 
-          copa version
+           copa version
 
 
 
