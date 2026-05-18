@@ -105,8 +105,10 @@ jobs:
           copa patch \
             -i $DOCKER_USERNAME/sample-app:latest \
             -r trivy-report.json \
-            -t $DOCKER_USERNAME/sample-app:patched
+            -t $DOCKER_USERNAME/sample-app:${{ github.run_number }}
+
       
       - name: Push Patched Image
         run: |
-          docker push $DOCKER_USERNAME/sample-app:patched
+          docker push $DOCKER_USERNAME/sample-app:${{ github.run_number }}
+
