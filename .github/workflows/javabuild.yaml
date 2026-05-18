@@ -38,11 +38,12 @@ jobs:
 
       - name: Install Copa
         run: |
-          wget https://github.com/project-copacetic/copacetic/releases/latest/download/copa_linux_amd64.deb
+          wget https://github.com/project-copacetic/copacetic/releases/download/v0.14.0/copa_0.14.0_linux_amd64.deb
 
-          sudo dpkg -i copa_linux_amd64.deb
+          sudo dpkg -i copa_0.14.0_linux_amd64.deb
 
           copa version
+
 
       - name: Install BuildKit
         run: |
