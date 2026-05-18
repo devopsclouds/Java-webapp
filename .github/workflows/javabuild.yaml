@@ -38,9 +38,13 @@ jobs:
 
       - name: Install Copa
         run: |
-          wget https://github.com/project-copacetic/copacetic/releases/download/v0.14.0/copa_0.14.0_linux_amd64.deb
+          wget https://github.com/project-copacetic/copacetic/releases/download/v0.12.0/copa_v0.12.0_linux_amd64.tar.gz
 
-          sudo dpkg -i copa_0.14.0_linux_amd64.deb
+          tar -xzf copa_v0.12.0_linux_amd64.tar.gz
+
+          sudo mv copa /usr/local/bin/
+
+          sudo chmod +x /usr/local/bin/copa
 
           copa version
 
