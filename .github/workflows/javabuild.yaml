@@ -38,17 +38,12 @@ jobs:
 
       - name: Install Copa
         run: |
-           wget -qO- https://raw.githubusercontent.com/project-copacetic/copacetic/main/install.sh | sudo bash
-
-           sudo find / -name copa 2>/dev/null
-
-           sudo cp /usr/local/bin/copa /usr/bin/copa || true
-
-           sudo chmod +x /usr/bin/copa
-
-           which copa
-
-           copa version
+           git clone https://github.com/project-copacetic/copacetic
+           cd copacetic
+           make
+           # OPTIONAL: install copa to a pathed folder (i.e. /usr/local/bin)
+           # Note: if you installed copa via Homebrew, you will need to uninstall it first
+           make install
 
 
 
