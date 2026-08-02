@@ -8,6 +8,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>blue deployment version8972891!!</h1>
+        <h1>blue deployment version8972!!</h1>
     </body>
 </html>
